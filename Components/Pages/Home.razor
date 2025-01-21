@@ -1,7 +1,21 @@
 ﻿@page "/"
+@using BlazorChatAI.Models
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h3>Wirtualny Dawid AI</h3>
+<p>Dawid mówi: @_answer</p>
 
-Welcome to your new app.
+@code {
+    private string _answer;
+    [Inject]
+    public OpenAiService OpenAiService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+       // _answer = await OpenAiService.GetAnswerAsync("Dawid jestes?");
+        _answer = $"Zapytaj 3 razy: {Environment.NewLine}" +
+        $"\"Dawid jestes?\", potem możesz jeszcze wystękąć \"no Dawid weź się..\"{Environment.NewLine}" +
+        "Jak nie odpowiada, to możesz zapytać wirtualnego Dawid AI";  
+    }
+}
