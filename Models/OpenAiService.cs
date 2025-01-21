@@ -32,9 +32,12 @@
 
             if (response.IsSuccessStatusCode)
             {
-                return "Sorry, ther is no answer from AI";
+                return "Sorry, there is no answer from AI";
             }
-            return await response.Content.ReadAsStringAsync();
+            ChatCompletionResopnse jsonResopnse = await response.Content.ReadFromJsonAsync<ChatCompletionResopnse>();        
+            string answer = jsonResopnse?.Choices?.FirstOrDefault()?.Message?.Content?.Trim();
+            
+            return string.IsNullOrWhiteSpace(answer) ? "Got no answer" : answer;
         }
     }
 }
