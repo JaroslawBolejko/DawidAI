@@ -1,0 +1,44 @@
+﻿@page "/chat"
+@rendermode InteractiveServer
+
+@using BlazorChatAI.Models
+
+<h3>Chat z wirtualnym Dawidem AI</h3>
+<textarea class="form-control mb-3" @bind="_currentPrompt" rows="3" placeholder="A, mam takie pytanie.."></textarea>
+<button class="btn btn-primary" @onclick="SendPrompt">Zapytaj Dawida AI!</button>
+<div class="mt-5">
+    <h4>Historia rozmowy:</h4>
+    <ul>
+        @foreach (var message in _messages)
+        {
+            <li><b>@message.Role:</b> @message.Content</li>
+        }
+    </ul>
+</div>
+
+@code {
+    private string _currentPrompt;
+    private List<ChatCompletionMessage> _messages = new List<ChatCompletionMessage>();
+    [Inject]
+    public OpenAiService OpenAiService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _messages.Add(new ChatCompletionMessage { Role = "System", Content = "Nie ma mnie, więc pytaj wirtualnego Dawida AI!" });
+    }
+
+    private async Task SendPrompt()
+    {
+        if (string.IsNullOrWhiteSpace(_currentPrompt))
+        {
+            return;
+        }
+
+        _messages.Add(new ChatCompletionMessage { Role = "User", Content = _currentPrompt });
+
+        var answer = await OpenAiService.GetAnswerAsync(_currentPrompt);
+
+        _messages.Add(new ChatCompletionMessage { Role = "DawidAI", Content = answer });
+        _currentPrompt = string.Empty;
+    }
+}
