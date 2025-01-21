@@ -13,7 +13,7 @@ namespace BlazorChatAI
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] ?? throw new Exception("Lack of key in appsettings.json");
-            builder.Services.AddHttpClient("OpenAi");
+            builder.Services.AddHttpClient("OpenAI");
             builder.Services.AddScoped<OpenAiService>(x =>
             {
                 var httpClientFactory = x.GetRequiredService<IHttpClientFactory>();
