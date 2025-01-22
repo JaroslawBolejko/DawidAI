@@ -32,7 +32,7 @@
                     new { role = "system", content = "You are a helpful assistant." },
                     new { role = "user", content = userPrompt },
                 },
-                max_tokens = 100,
+                max_tokens = 200,
                 temperature = 0.7,
             };
 
